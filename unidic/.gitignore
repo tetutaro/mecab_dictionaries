@@ -1,0 +1,11 @@
+mecab-unidic-neologd/
+src-unidic-csj/
+src-unidic-csj-neologd/
+src-unidic-cwj/
+src-unidic-cwj-neologd/
+user.csv
+version-unidic-cwj
+version-unidic-csj
+version-unidic-neologd
+neologd/
+temp/

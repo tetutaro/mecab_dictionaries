@@ -127,3 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Poetry settings
+poetry.lock
+
+# local settings
+*.zip
+userdic.jsonl
+unidic-cwj-*/
+unidic-csj-*/
+mecab-0.996.tar.gz
+mecab-0.996/

@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "unidic-cwj"
+version = "3.1.1"
+description = "UniDic-cwj"
+authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
+packages = [{include = "unidic_cwj"}]
+include = ["unidic_cwj/dic/*"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
