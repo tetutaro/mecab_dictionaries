@@ -36,10 +36,9 @@ eval-size = 10
 unk-eval-size = 4
 config-charset = utf8
 
-output-format-type = my
+output-format-type = json
 
-node-format-my = %m\t%f[0],%f[1],%f[2],%f[3],%f[4],%f[5],%f[6],%f[7],%f[9],%f[10],%f[29]\n
-unk-format-my = %m\t%f[0],%f[1],%f[2],%f[3],%f[4],%f[5],,,,,UNK\n
-bos-format-my =
-eos-format-my = EOS\n
-; node-format-my = surface:%m\tpos1:%f[0]\tpos2:%f[1]\tpos3:%f[2]\tpos4:%f[3]\tcType:%f[4]\tcForm:%f[5]\tlForm:%f[6]\tlemma:%f[7]\torth:%f[8]\tpron:%f[9]\torthBase:%f[10]\tpronBase:%f[11]\tgoshu:%f[12]\tiType:%f[13]\tiForm:%f[14]\tfType:%f[15]\tfForm:%f[16]\tiConType:%f[17]\tfConType:%f[18]\tlType:%f[19]\tkana:%f[20]\tkanaBase:%f[21]\tform:%f[22]\tformBase:%f[23]\taType:%f[24]\taConType:%f[25]\taModType:%f[26]\tlid:%f[27]\tlemma_id:%f[28]\n
+node-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"%f[6]","lemma":"%f[7]","orth":"%f[8]","pron":"%f[9]","orthBase":"%f[10]","pronBase":"%f[11]","goshu":"%f[12]","iType":"%f[13]","iForm":"%f[14]","fType":"%f[15]","fForm":"%f[16]","iConType":"%f[17]","fConType":"%f[18]","n_type":"%f[19]","kana":"%f[20]","kanaBase":"%f[21]","form":"%f[22]","formBase":"%f[23]","aType":"%f[24]","aConType":"%f[25]","aModType":"%f[26]","lid":"%f[27]","lemma_id":"%f[28]","dictionary":"%f[29]"}\n
+unk-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"","pronBase":"","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dictionary":"UNK"}\n
+bos-format-json =
+eos-format-json = EOS\n
