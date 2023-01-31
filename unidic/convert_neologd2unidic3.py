@@ -26,29 +26,29 @@ def create_format(
     yomi: str,
     base: str,
     pron: str,
-    gosyu: str,
+    goshu: str,
     kind: str,
 ) -> str:
     fmt: str = (
         f"{surf},,,,{spch},*,*,"
         f"{yomi},{yomi},{base},{pron},{base},{pron},"
-        f"{gosyu},*,*,*,*,*,*,{kind},"
+        f"{goshu},*,*,*,*,*,*,{kind},"
         f"{yomi},{yomi},{yomi},{yomi},*,*,*,*,*"
     )
     return fmt
 
 
-def detect_gosyu(surf: str) -> str:
-    gosyu: str = "不明"
+def detect_goshu(surf: str) -> str:
+    goshu: str = "不明"
     if re.match(r"^[a-zA-Z0-9]+$", surf):
-        gosyu = "外"
+        goshu = "外"
     elif re.match(r"^[ア-ン]+$", surf):
-        gosyu = "外"
+        goshu = "外"
     elif re.match(r"^[あ-ん]+$", surf):
-        gosyu = "和"
+        goshu = "和"
     else:
-        gosyu = "混"
-    return gosyu
+        goshu = "混"
+    return goshu
 
 
 def convert_proper_noun(
@@ -68,7 +68,7 @@ def convert_proper_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="固",
+            goshu="固",
             kind="姓",
         )
     elif pos3 == "人名" and pos4 == "名":
@@ -78,7 +78,7 @@ def convert_proper_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="固",
+            goshu="固",
             kind="名",
         )
     elif pos3 == "人名" and pos4 == "一般":
@@ -88,7 +88,7 @@ def convert_proper_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="固",
+            goshu="固",
             kind="人名",
         )
     elif pos3 == "地名" and pos4 == "一般":
@@ -98,7 +98,7 @@ def convert_proper_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="固",
+            goshu="固",
             kind="地名",
         )
     elif pos3 == "一般":
@@ -108,7 +108,7 @@ def convert_proper_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="固",
+            goshu="固",
             kind="固有名",
         )
     return conved
@@ -123,7 +123,7 @@ def convert_noun(
     pron: str,
 ) -> str:
     conved: str = ""
-    gosyu = detect_gosyu(surf=surf)
+    goshu = detect_goshu(surf=surf)
     if pos3 in ["一般", "サ変可能"]:
         conved = create_format(
             surf=surf,
@@ -131,7 +131,7 @@ def convert_noun(
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu=gosyu,
+            goshu=goshu,
             kind="体",
         )
     return conved
@@ -155,7 +155,7 @@ def convert_format(poss: List[str]) -> str:
             yomi="*",
             base=surf,
             pron="*",
-            gosyu="記号",
+            goshu="記号",
             kind="補助",
         )
     elif pos1 == "記号" and pos2 == "一般":
@@ -165,7 +165,7 @@ def convert_format(poss: List[str]) -> str:
             yomi=yomi,
             base=base,
             pron=pron,
-            gosyu="記号",
+            goshu="記号",
             kind="記号",
         )
     elif pos1 == "名詞":
