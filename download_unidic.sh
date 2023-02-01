@@ -12,14 +12,10 @@ function download_unidic () {
     if [[ ! -f ${fname} ]]; then
         echo "get the latest version of unidic-${dic}"
         wget -O ${fname} ${url}
-    else
-        echo "${fname} has already downloaded"
     fi
     if [[ ! -d ${dname} ]]; then
         echo "unzip ${fname}"
         unzip ${fname}
-    else
-        echo "${fname} has already unzipped at ${dname}"
     fi
     echo "remove old sources of unidic-${dic}"
     if [[ -d "unidic/src-unidic-${dic}" ]]; then
@@ -37,29 +33,36 @@ function download_unidic () {
     echo "${version}" > unidic/version-unidic-${dic}
 }
 
-# UniDic-cwj
-download_unidic cwj
-# UniDic-csj
-download_unidic csj
+if [[ $# -gt 0 ]]; then
+    if [[ "$1" == "cwj" ]]; then
+        # download UniDic-cwj
+        download_unidic cwj
+    elif [[ "$1" == "csj" ]]; then
+        # download UniDic-csj
+        download_unidic csj
+    else
+        echo "no dictionary downloaded"
+    fi
+else
+    # download UniDic-cwj and UniDic-crj
+    download_unidic cwj
+    download_unidic csj
+fi
 
 # clone/update mecab-unidic-neologd
-if [[ -d "unidic/mecab-unidic-neologd" ]]; then
-    echo "update mecab-unidic-neologd"
-    cd unidic/mecab-unidic-neologd >/dev/null 2>&1
-    git pull
-    cd - >/dev/null 2>&1
-else
+neologd_dir="unidic/mecab-unidic-neologd"
+neologd_vfname="unidic/version-unidic-neologd"
+if [[ ! -d ${neologd_dir} ]]; then
     echo "clone mecab-unidic-neologd"
-    git clone --depth 1 https://github.com/neologd/mecab-unidic-neologd.git unidic/mecab-unidic-neologd
+    git clone --depth 1 https://github.com/neologd/mecab-unidic-neologd.git ${neologd_dir}
 fi
 echo "set the version of mecab-unidic-neologd"
-cd unidic/mecab-unidic-neologd >/dev/null 2>&1
+cd ${neologd_dir} >/dev/null 2>&1
 version=$(git show --format='%h' --no-patch)
 cd - >/dev/null 2>&1
-echo "${version}" > unidic/version-unidic-neologd
+echo "${version}" > ${neologd_vfname}
 
 # create user dictionary
 if [[ -f "userdic.jsonl" ]]; then
-    echo "create user dictionary of unidic"
     python3 convert_userdic.py unidic
 fi

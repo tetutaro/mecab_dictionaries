@@ -19,23 +19,23 @@ else
 fi
 # check directories
 if [[ ! -d src-unidic-cwj ]]; then
-    echo "src-unidic-cwj is not created. do ../download_unidic.sh."
+    echo "src-unidic-cwj is not created. do ${PWD}/../download_unidic.sh."
     exit 1
 fi
 if [[ ! -d src-unidic-cwj-neologd ]]; then
-    echo "src-unidic-cwj-neologd is not created. do ../download_unidic.sh."
+    echo "src-unidic-cwj-neologd is not created. do ${PWD}/../download_unidic.sh."
     exit 1
 fi
 if [[ ! -d src-unidic-csj ]]; then
-    echo "src-unidic-csj is not created. do ../download_unidic.sh."
+    echo "src-unidic-csj is not created. do ${PWD}/../download_unidic.sh."
     exit 1
 fi
 if [[ ! -d src-unidic-csj-neologd ]]; then
-    echo "src-unidic-csj-neologd is not created. do ../download_unidic.sh."
+    echo "src-unidic-csj-neologd is not created. do ${PWD}/../download_unidic.sh."
     exit 1
 fi
 if [[ ! -d mecab-unidic-neologd ]]; then
-    echo "mecab-unidic-neologd is not created. do ../download_unidic.sh."
+    echo "mecab-unidic-neologd is not created. do ${PWD}/../download_unidic.sh."
     exit 1
 fi
 
@@ -73,6 +73,15 @@ function create_user_dictionary () {
 
 # convert unidic-neologd for the UniDic3 format
 function convert_neologd () {
+    if [[ -f neologd/version-unidic-neologd ]]; then
+        old_version=$(cat neologd/version-unidic-neologd)
+        cd mecab-unidic-neologd >/dev/null 2>&1
+        new_version=$(git show --format='%h' --no-patch)
+        cd - >/dev/null 2>&1
+        if [[ "${old_version}" == "${new_version}" ]]; then
+            return 0
+        fi
+    fi
     echo "retrieve the seed of mecab-unidic-neologd"
     if [[ -d temp ]]; then
         rm -rf temp
@@ -80,23 +89,26 @@ function convert_neologd () {
     mkdir temp
     cp mecab-unidic-neologd/seed/*.xz temp/.
     unxz temp/*.xz
-    echo "convert neologd for the UniDic3 format"
     if [[ -d neologd ]]; then
         rm -rf neologd
     fi
     mkdir neologd
     for file in $(ls temp/*.csv); do
         bname=${file##*/}
+        echo "convert ${bname} for the UniDic3 format"
         python3 convert_neologd2unidic3.py -o neologd/${bname} ${file}
     done
     rm -rf temp
+    cp -f version-unidic-neologd neologd/.
 }
 
 # add left-ID, right-ID, cost and name to the NEologd dictionary
 function create_neologd_dictionary () {
     src_path=$1
     for file in $(ls neologd/*.csv); do
-        dfile="${src_path}/${file##*/}"
+        bname=${file##*/}
+        dfile="${src_path}/${bname}"
+        echo "add indexes to ${bname}"
         ${dictindex} -m ${src_path}/model.bin -d ${src_path} -u ${dfile} -f UTF8 -t UTF8 -a ${file}
         ${sed} -i -e "s/$/,unidic-neologd/g" ${dfile}
     done
@@ -179,6 +191,7 @@ function rebuild_dictionary () {
     add_dictionary_name ${src_path} ${base_dic}
     create_user_dictionary ${src_path}
     if "${is_neologd}"; then
+        convert_neologd
         create_neologd_dictionary ${src_path}
     fi
     cd ${src_path} >/dev/null 2>&1
@@ -191,13 +204,26 @@ function rebuild_dictionary () {
     build_target_dictionary ${src_path} ${tgt_path} ${tgt_dic_path} ${version}
 }
 
-# convert NEologd for the UniDic3 format
-convert_neologd
-# rebuild UniDic-cwj
-rebuild_dictionary cwj false
-# create UniDic-cwj + NEologd
-rebuild_dictionary cwj true
-# rebuild UniDic-csj
-rebuild_dictionary csj false
-# create UniDic-csj + NEologd
-rebuild_dictionary csj true
+if [[ $# -gt 0 ]]; then
+    if [[ "$1" == "cwj" ]]; then
+        # rebuild UniDic-cwj
+        rebuild_dictionary cwj false
+    elif [[ "$1" == "cwj-neologd" ]]; then
+        # create UniDic-cwj + NEologd
+        rebuild_dictionary cwj true
+    elif [[ "$1" == "csj" ]]; then
+        # rebuild UniDic-csj
+        rebuild_dictionary csj false
+    elif [[ "$1" == "csj-neologd" ]]; then
+        # create UniDic-csj + NEologd
+        rebuild_dictionary csj true
+    else
+        echo "no dictionary is build"
+    fi
+else
+    # rebuild all dictionaries
+    rebuild_dictionary cwj false
+    rebuild_dictionary cwj true
+    rebuild_dictionary csj false
+    rebuild_dictionary csj true
+fi
