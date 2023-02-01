@@ -18,24 +18,16 @@ else
     exit 1
 fi
 # check directories
-if [[ ! -d src-unidic-cwj ]]; then
-    echo "src-unidic-cwj is not created. do ${PWD}/../download_unidic.sh."
+if [[ ! -d src-ipadic ]]; then
+    echo "src-ipadic is not created. do ${PWD}/../download_ipadic.sh."
     exit 1
 fi
-if [[ ! -d src-unidic-cwj-neologd ]]; then
-    echo "src-unidic-cwj-neologd is not created. do ${PWD}/../download_unidic.sh."
+if [[ ! -d src-ipadic-neologd ]]; then
+    echo "src-ipadic-neologd is not created. do ${PWD}/../download_ipadic.sh."
     exit 1
 fi
-if [[ ! -d src-unidic-csj ]]; then
-    echo "src-unidic-csj is not created. do ${PWD}/../download_unidic.sh."
-    exit 1
-fi
-if [[ ! -d src-unidic-csj-neologd ]]; then
-    echo "src-unidic-csj-neologd is not created. do ${PWD}/../download_unidic.sh."
-    exit 1
-fi
-if [[ ! -d mecab-unidic-neologd ]]; then
-    echo "mecab-unidic-neologd is not created. do ${PWD}/../download_unidic.sh."
+if [[ ! -d mecab-ipadic-neologd ]]; then
+    echo "mecab-ipadic-neologd is not created. do ${PWD}/../download_ipadic.sh."
     exit 1
 fi
 
@@ -43,12 +35,11 @@ set -eu
 
 # get the path of source dictionary
 function get_source_path () {
-    base_dic=$1
-    is_neologd=$2
+    is_neologd=$1
     if "${is_neologd}"; then
-        src_path="src-unidic-${base_dic}-neologd"
+        src_path="src-ipadic-neologd"
     else
-        src_path="src-unidic-${base_dic}"
+        src_path="src-ipadic"
     fi
     echo ${src_path}
 }
@@ -56,9 +47,8 @@ function get_source_path () {
 # add the name of dictionary to the system dictionary
 function add_dictionary_name () {
     src_path=$1
-    base_dic=$2
     if [[ ! -f "${src_path}/.added" ]]; then
-        ${sed} -i -e "s/$/,unidic-${base_dic}/g" ${src_path}/*.csv
+        ${sed} -i -e "s/$/,ipadic/g" ${src_path}/*.csv
         touch ${src_path}/.added
     fi
 }
@@ -75,33 +65,24 @@ function create_user_dictionary () {
 
 # convert unidic-neologd for the UniDic3 format
 function convert_neologd () {
-    if [[ -f neologd/version-unidic-neologd ]]; then
-        old_version=$(cat neologd/version-unidic-neologd)
-        cd mecab-unidic-neologd >/dev/null 2>&1
+    if [[ -f neologd/version-ipadic-neologd ]]; then
+        old_version=$(cat neologd/version-ipadic-neologd)
+        cd mecab-ipadic-neologd >/dev/null 2>&1
         new_version=$(git show --format='%h' --no-patch)
         cd - >/dev/null 2>&1
         if [[ "${old_version}" == "${new_version}" ]]; then
             return 0
         fi
     fi
-    echo "retrieve the seed of mecab-unidic-neologd"
-    if [[ -d temp ]]; then
-        rm -rf temp
-    fi
-    mkdir temp
-    cp mecab-unidic-neologd/seed/*.xz temp/.
-    unxz temp/*.xz
+    echo "retrieve the seed of mecab-ipadic-neologd"
     if [[ -d neologd ]]; then
         rm -rf neologd
     fi
     mkdir neologd
-    for file in $(ls temp/*.csv); do
-        bname=${file##*/}
-        echo "convert ${bname} for the UniDic3 format"
-        python3 convert_neologd2unidic3.py -o neologd/${bname} ${file}
-    done
-    rm -rf temp
-    cp -f version-unidic-neologd neologd/.
+    cp mecab-ipadic-neologd/seed/*.xz neologd/.
+    unxz neologd/*.xz
+    nkf -w --overwrite neologd/*
+    cp -f version-ipadic-neologd neologd/.
 }
 
 # add left-ID, right-ID, cost and name to the NEologd dictionary
@@ -110,46 +91,42 @@ function create_neologd_dictionary () {
     for file in $(ls neologd/*.csv); do
         bname=${file##*/}
         dfile="${src_path}/${bname}"
-        echo "add indexes to ${bname}"
-        ${dictindex} -m ${src_path}/model.bin -d ${src_path} -u ${dfile} -f UTF8 -t UTF8 -a ${file}
-        ${sed} -i -e "s/$/,unidic-neologd/g" ${dfile}
+        cp ${file} ${dfile}
+        ${sed} -i -e "s/$/,ipadic-neologd/g" ${dfile}
     done
 }
 
 # get the path of target dictionary
 function get_target_path () {
-    base_dic=$1
-    is_neologd=$2
+    is_neologd=$1
     if "${is_neologd}"; then
-        tgt_path="unidic-${base_dic}-neologd"
+        tgt_path="ipadic-neologd"
     else
-        tgt_path="unidic-${base_dic}"
+        tgt_path="ipadic"
     fi
     echo ${tgt_path}
 }
 
 # get the path of target dictionary
 function get_target_dictionary_path () {
-    base_dic=$1
-    is_neologd=$2
+    is_neologd=$1
     if "${is_neologd}"; then
-        tgt_dic_path="unidic-${base_dic}-neologd/unidic_${base_dic}_neologd/dic"
+        tgt_dic_path="ipadic-neologd/ipadic_neologd/dic"
     else
-        tgt_dic_path="unidic-${base_dic}/unidic_${base_dic}/dic"
+        tgt_dic_path="ipadic/ipadic/dic"
     fi
     echo ${tgt_dic_path}
 }
 
 # get the version of the dictionary
 function get_version () {
-    base_dic=$1
-    is_neologd=$2
-    unidic_version=$(cat version-unidic-${base_dic})
-    neologd_version=$(cat version-unidic-neologd)
+    is_neologd=$1
+    ipadic_version=$(cat version-ipadic)
+    neologd_version=$(cat version-ipadic-neologd)
     if "${is_neologd}"; then
-        version="${unidic_version}+${neologd_version}"
+        version="${ipadic_version}+${neologd_version}"
     else
-        version="${unidic_version}"
+        version="${ipadic_version}"
     fi
     echo ${version}
 }
@@ -172,6 +149,7 @@ function build_target_dictionary () {
     cp -f ${src_path}/*.csv ${tgt_dic_path}/.
     cp -f ${src_path}/matrix.bin ${tgt_dic_path}/.
     cp -f ${src_path}/model.bin ${tgt_dic_path}/.
+    cp -f ${src_path}/pos-id.def ${tgt_dic_path}/.
     cp -f ${src_path}/rewrite.def ${tgt_dic_path}/.
     cp -f ${src_path}/right-id.def ${tgt_dic_path}/.
     cp -f ${src_path}/sys.dic ${tgt_dic_path}/.
@@ -186,11 +164,16 @@ function build_target_dictionary () {
 
 # rebuild UniDic
 function rebuild_dictionary () {
-    base_dic=$1
-    is_neologd=$2
-    src_path=$(get_source_path ${base_dic} ${is_neologd})
+    is_neologd=$1
+    src_path=$(get_source_path ${is_neologd})
     echo "create ${src_path}"
-    add_dictionary_name ${src_path} ${base_dic}
+    add_dictionary_name ${src_path}
+    if [[ ! -f "${src_path}/model.bin" ]]; then
+        # make binary beforehand to compile user dictionary.
+        cd ${src_path} >/dev/null 2>&1
+        ${dictindex} -f UTF8 -t UTF8
+        cd - >/dev/null 2>&1
+    fi
     create_user_dictionary ${src_path}
     if "${is_neologd}"; then
         convert_neologd
@@ -199,33 +182,25 @@ function rebuild_dictionary () {
     cd ${src_path} >/dev/null 2>&1
     ${dictindex} -f UTF8 -t UTF8
     cd - >/dev/null 2>&1
-    tgt_path=$(get_target_path ${base_dic} ${is_neologd})
+    tgt_path=$(get_target_path ${is_neologd})
     echo "build ${tgt_path}"
-    tgt_dic_path=$(get_target_dictionary_path ${base_dic} ${is_neologd})
-    version=$(get_version ${base_dic} ${is_neologd})
+    tgt_dic_path=$(get_target_dictionary_path ${is_neologd})
+    version=$(get_version ${is_neologd})
     build_target_dictionary ${src_path} ${tgt_path} ${tgt_dic_path} ${version}
 }
 
 if [[ $# -gt 0 ]]; then
-    if [[ "$1" == "cwj" ]]; then
-        # rebuild UniDic-cwj
-        rebuild_dictionary cwj false
-    elif [[ "$1" == "cwj-neologd" ]]; then
-        # create UniDic-cwj + NEologd
-        rebuild_dictionary cwj true
-    elif [[ "$1" == "csj" ]]; then
-        # rebuild UniDic-csj
-        rebuild_dictionary csj false
-    elif [[ "$1" == "csj-neologd" ]]; then
-        # create UniDic-csj + NEologd
-        rebuild_dictionary csj true
+    if [[ "$1" == "ipadic" ]]; then
+        # rebuild IPA Dictionary
+        rebuild_dictionary false
+    elif [[ "$1" == "ipadic-neologd" ]]; then
+        # create IPA Dictionary + NEologd
+        rebuild_dictionary true
     else
         echo "no dictionary is build"
     fi
 else
     # rebuild all dictionaries
-    rebuild_dictionary cwj false
-    rebuild_dictionary cwj true
-    rebuild_dictionary csj false
-    rebuild_dictionary csj true
+    rebuild_dictionary false
+    rebuild_dictionary true
 fi

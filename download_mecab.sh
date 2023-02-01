@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 mecab_tarball="mecab-0.996.tar.gz"
 mecab_dir="mecab-0.996"
 if [[ ! -f "${mecab_tarball}" ]]; then

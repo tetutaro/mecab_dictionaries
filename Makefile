@@ -6,7 +6,7 @@ mecab:
 	@download_mecab.sh
 
 .PHONY: dictionaries
-dictionaries: unidic
+dictionaries: unidic ipadic
 
 .PHONY: unidic
 unidic: mecab
@@ -33,6 +33,21 @@ unidic-csj-neologd: mecab
 	@download_unidic.sh csj
 	@cd unidic && make csj-neologd
 
+.PHONY: ipadic
+ipadic: mecab
+	@download_ipadic.sh
+	@cd ipadic && make dictionaries
+
+.PHONY: ipadic-only
+ipadic-only: mecab
+	@download_ipadic.sh
+	@cd ipadic && make ipadic
+
+.PHONY: ipadic-neologd
+ipadic-neologd: mecab
+	@download_ipadic.sh
+	@cd ipadic && make ipadic-neologd
+
 .PHONY: clean
 clean: clean-python clean-dictionary clean-system
 
@@ -46,15 +61,16 @@ clean-python:
 .PHONY: clean-dictonary
 clean-dictionary:
 	@cd unidic && make clean
+	@cd ipadic && make clean
 	@rm -rf mecab-0.996
 	@rm -f unidic/user.csv
-	@rm -f unidic/version-unidic-cwj
-	@rm -f unidic/version-unidic-csj
-	@rm -f unidic/version-unidic-neologd
-	@rm -f unidic/src-unidic-cwj
-	@rm -f unidic/src-unidic-cwj-neologd
-	@rm -f unidic/src-unidic-crj
-	@rm -f unidic/src-unidic-crj-neologd
+	@rm -rf unidic/version-unidic-cwj
+	@rm -rf unidic/version-unidic-csj
+	@rm -rf unidic/version-unidic-neologd
+	@rm -rf unidic/src-unidic-cwj
+	@rm -rf unidic/src-unidic-cwj-neologd
+	@rm -rf unidic/src-unidic-crj
+	@rm -rf unidic/src-unidic-crj-neologd
 	@rm -rf unidic-cwj-*-full
 	@rm -rf unidic-csj-*-full
 

@@ -4,19 +4,19 @@ dictionaries:
 
 .PHONY: cwj
 cwj:
-	@make_dictionary cwj
+	@make_dictionary.sh cwj
 
 .PHONY: cwj-neologd
 cwj-neologd:
-	@make_dictionary cwj-neologd
+	@make_dictionary.sh cwj-neologd
 
 .PHONY: csj
 csj:
-	@make_dictionary csj
+	@make_dictionary.sh csj
 
 .PHONY: csj-neologd
 csj-neologd:
-	@make_dictionary csj-neologd
+	@make_dictionary.sh csj-neologd
 
 .PHONY: clean
 clean:

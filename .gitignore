@@ -134,6 +134,7 @@ poetry.lock
 # local settings
 *.zip
 userdic.jsonl
+ipadic-*
 unidic-cwj-*/
 unidic-csj-*/
 mecab-0.996.tar.gz

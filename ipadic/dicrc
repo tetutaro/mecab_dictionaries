@@ -1,0 +1,24 @@
+; List of features
+; f[0]:  pos1
+; f[1]:  pos2
+; f[2]:  pos3
+; f[3]:  pos4
+; f[4]:  cType
+; f[5]:  cForm
+; f[6]:  base
+; f[7]:  yomi
+; f[8]:  pron
+; f[9]:  dictionary
+
+cost-factor = 800
+bos-feature = BOS/EOS,*,*,*,*,*,*,*,*
+eval-size = 8
+unk-eval-size = 4
+config-charset = utf8
+
+output-format-type = json
+
+node-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"%f[6]","pronBase":"%f[8]","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"%f[7]","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dictionary":"%f[9]"}\n
+unk-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"","pronBase":"","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dictionary":"UNK"}\n
+bos-format-json =
+eos-format-json = EOS\n

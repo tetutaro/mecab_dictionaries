@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "ipadic"
+version = "2.7.0-20070801"
+description = "IPA Dictionary"
+authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
+packages = [{include = "ipadic"}]
+include = ["ipadic/dic/*"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

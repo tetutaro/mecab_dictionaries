@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 # function to download and extract UniDic-{cwj,csj}
 function download_unidic () {
     dic=$1
@@ -33,6 +35,30 @@ function download_unidic () {
     echo "${version}" > unidic/version-unidic-${dic}
 }
 
+# clone/update mecab-unidic-neologd
+function download_unidic_neologd () {
+    neologd_dir="unidic/mecab-unidic-neologd"
+    neologd_vfname="unidic/version-unidic-neologd"
+    neologd_repo="https://github.com/neologd/mecab-unidic-neologd.git"
+    if [[ ! -d ${neologd_dir} ]]; then
+        echo "clone mecab-unidic-neologd"
+        git clone --depth 1 ${neologd_repo} ${neologd_dir}
+    fi
+    echo "set the version of mecab-unidic-neologd"
+    cd ${neologd_dir} >/dev/null 2>&1
+    version=$(git show --format='%h' --no-patch)
+    cd - >/dev/null 2>&1
+    echo "${version}" > ${neologd_vfname}
+}
+
+# create user dictionary
+function create_user_dictionary () {
+    if [[ -f "userdic.jsonl" ]]; then
+        python3 convert_userdic.py unidic
+    fi
+}
+
+# main
 if [[ $# -gt 0 ]]; then
     if [[ "$1" == "cwj" ]]; then
         # download UniDic-cwj
@@ -48,21 +74,5 @@ else
     download_unidic cwj
     download_unidic csj
 fi
-
-# clone/update mecab-unidic-neologd
-neologd_dir="unidic/mecab-unidic-neologd"
-neologd_vfname="unidic/version-unidic-neologd"
-if [[ ! -d ${neologd_dir} ]]; then
-    echo "clone mecab-unidic-neologd"
-    git clone --depth 1 https://github.com/neologd/mecab-unidic-neologd.git ${neologd_dir}
-fi
-echo "set the version of mecab-unidic-neologd"
-cd ${neologd_dir} >/dev/null 2>&1
-version=$(git show --format='%h' --no-patch)
-cd - >/dev/null 2>&1
-echo "${version}" > ${neologd_vfname}
-
-# create user dictionary
-if [[ -f "userdic.jsonl" ]]; then
-    python3 convert_userdic.py unidic
-fi
+download_unidic_neologd
+create_user_dictionary
