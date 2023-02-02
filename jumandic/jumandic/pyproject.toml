@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "jumandic"
+version = "7.0-20130310"
+description = "JUMAN Dictionry for MeCab"
+authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
+packages = [{include = "jumandic"}]
+include = ["jumandic/dic/*"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

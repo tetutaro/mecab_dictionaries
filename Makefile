@@ -6,7 +6,7 @@ mecab:
 	@download_mecab.sh
 
 .PHONY: dictionaries
-dictionaries: unidic ipadic
+dictionaries: unidic ipadic jumandic
 
 .PHONY: unidic
 unidic: mecab
@@ -48,6 +48,11 @@ ipadic-neologd: mecab
 	@download_ipadic.sh
 	@cd ipadic && make ipadic-neologd
 
+.PHONY: jumandic
+jumandic: mecab
+	@download_jumandic.sh
+	@cd jumandic && make dictionary
+
 .PHONY: clean
 clean: clean-python clean-dictionary clean-system
 
@@ -62,6 +67,7 @@ clean-python:
 clean-dictionary:
 	@cd unidic && make clean
 	@cd ipadic && make clean
+	@cd jumandic && make clean
 	@rm -rf mecab-0.996
 	@rm -f unidic/user.csv
 	@rm -rf unidic/version-unidic-cwj

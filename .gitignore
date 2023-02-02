@@ -135,7 +135,11 @@ poetry.lock
 *.zip
 userdic.jsonl
 ipadic-*
+!ipadic/ipadic-neologd/
+jumandic-*
 unidic-cwj-*/
+!unidic/unidic-cwj-neologd/
 unidic-csj-*/
+!unidic/unidic-csj-neologd/
 mecab-0.996.tar.gz
 mecab-0.996/

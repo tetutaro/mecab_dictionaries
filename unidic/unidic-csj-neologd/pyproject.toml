@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "unidic-csj-neologd"
+version = "3.1.1+22895c0"
+description = "UniDic-csj + NEologd"
+authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
+packages = [{include = "unidic_csj_neologd"}]
+include = ["unidic_csj_neologd/dic/*"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

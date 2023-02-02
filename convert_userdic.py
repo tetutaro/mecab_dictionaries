@@ -24,6 +24,16 @@ TYPE_SPCH: Dict[str, Dict[str, str]] = {
         "組織": "名詞,固有名詞,組織,*",
         "地名": "名詞,固有名詞,地域,一般",
     },
+    "jumandic": {
+        "普通名詞": "名詞,普通名詞",
+        "サ変可能名詞": "名詞,サ変名詞",
+        "固有名詞": "名詞,固有名詞",
+        "人名": "名詞,人名",
+        "姓": "名詞,人名",
+        "名": "名詞,人名",
+        "組織": "名詞,組織名",
+        "地名": "名詞,地名",
+    },
     "unidic": {
         "普通名詞": "名詞,普通名詞,一般,*",
         "サ変可能名詞": "名詞,普通名詞,サ変可能,*",
@@ -67,7 +77,11 @@ class Handler:
         return f"{base},,,,{spch},*,*,{base},{yomi},{pron}"
 
     def _convert_jumandic(self: Handler, entry: Dict[str, str]) -> str:
-        return ""
+        base = entry.get("base")
+        spch = TYPE_SPCH[self.dictionary][entry.get("type")]
+        yomi = entry.get("yomi")
+        pron = entry.get("pron")
+        return f"{base},,,,{spch},*,*,{base},{yomi},{pron}"
 
     def _convert_unidic(self: Handler, entry: Dict[str, str]) -> str:
         base = entry.get("base")
