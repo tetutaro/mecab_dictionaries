@@ -4,7 +4,7 @@ version = "2.7.0-20070801+abc61e3"
 description = "IPA Dictionary + NEologd"
 authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
 packages = [{include = "ipadic_neologd"}]
-include = ["ipadic_neologd/dic/*"]
+include = ["ipadic_neologd/__version__.py", "ipadic_neologd/dic/*"]
 
 [tool.poetry.dependencies]
 python = "^3.10"

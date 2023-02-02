@@ -4,7 +4,7 @@ version = "2.7.0-20070801"
 description = "IPA Dictionary"
 authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
 packages = [{include = "ipadic"}]
-include = ["ipadic/dic/*"]
+include = ["ipadic/__version__.py", "ipadic/dic/*"]
 
 [tool.poetry.dependencies]
 python = "^3.10"

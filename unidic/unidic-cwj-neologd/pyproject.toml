@@ -4,7 +4,7 @@ version = "3.1.1+22895c0"
 description = "UniDic-cwj + NEologd"
 authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
 packages = [{include = "unidic_cwj_neologd"}]
-include = ["unidic_cwj/dic/*"]
+include = ["unidic_cwj_neologd/__version__.py", "unidic_cwj_neologd/dic/*"]
 
 [tool.poetry.dependencies]
 python = "^3.10"

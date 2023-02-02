@@ -156,6 +156,7 @@ function build_target_dictionary () {
     cp -f ${src_path}/unk.def ${tgt_dic_path}/.
     cp -f ${src_path}/unk.dic ${tgt_dic_path}/.
     echo "__version__ = \"${version}\"" > ${tgt_pkg_path}/__version__.py
+    echo "build Python package: ${tgt_path}"
     cd ${tgt_path} >/dev/null 2>&1
     poetry version ${version}
     poetry build

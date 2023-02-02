@@ -53,6 +53,40 @@ jumandic: mecab
 	@download_jumandic.sh
 	@cd jumandic && make dictionary
 
+.PHONY: build-package
+build-package:
+	@cd unidic/unidic-cwj/ && poetry build
+	@cd unidic/unidic-cwj-neologd/ && poetry build
+	@cd unidic/unidic-csj/ && poetry build
+	@cd unidic/unidic-csj-neologd/ && poetry build
+	@cd ipadic/ipadic/ && poetry build
+	@cd ipadic/ipadic-neologd/ && poetry build
+	@cd jumandic/jumandic/ && poetry build
+
+.PHONY: reflect-dicrc
+reflect-dicrc:
+	@cp -f unidic/dicrc unidic/unidic-cwj/unidic_cwj/dic/.
+	@cp -f unidic/dicrc unidic/unidic-cwj-neologd/unidic_cwj_neologd/dic/.
+	@cp -f unidic/dicrc unidic/unidic-csj/unidic_csj/dic/.
+	@cp -f unidic/dicrc unidic/unidic-csj-neologd/unidic_csj_neologd/dic/.
+	@cp -f ipadic/dicrc ipadic/ipadic/ipadic/dic/.
+	@cp -f ipadic/dicrc ipadic/ipadic-neologd/ipadic_neologd/dic/.
+	@cp -f jumandic/dicrc jumandic/jumandic/jumandic/dic/.
+
+.PHONY: install-dictionaries-local
+install-dictionaries-local:
+	pip install unidic/unidic-cwj/dist/unidic_cwj-*.whl
+	pip install unidic/unidic-cwj-neologd/dist/unidic_cwj_neologd-*.whl
+	pip install unidic/unidic-csj/dist/unidic_csj-*.whl
+	pip install unidic/unidic-csj-neologd/dist/unidic_csj_neologd-*.whl
+	pip install ipadic/ipadic/dist/ipadic-*.whl
+	pip install ipadic/ipadic-neologd/dist/ipadic_neologd-*.whl
+	pip install jumandic/jumandic/dist/jumandic-*.whl
+
+.PHONY: uninstall-dictionaries-local
+uninstall-dictionaries-local:
+	pip uninstall -y unidic-cwj unidic-cwj-neologd unidic-csj unidic-csj-neologd ipadic ipadic-neologd jumandic
+
 .PHONY: clean
 clean: clean-python clean-dictionary clean-system
 

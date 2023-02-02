@@ -143,3 +143,5 @@ unidic-csj-*/
 !unidic/unidic-csj-neologd/
 mecab-0.996.tar.gz
 mecab-0.996/
+dic/
+__version__.py

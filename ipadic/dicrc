@@ -1,14 +1,19 @@
-; List of features
-; f[0]:  pos1
-; f[1]:  pos2
-; f[2]:  pos3
-; f[3]:  pos4
-; f[4]:  cType
-; f[5]:  cForm
-; f[6]:  base
-; f[7]:  yomi
-; f[8]:  pron
-; f[9]:  dictionary
+; List of features        UniDic3 Name  json-disp json-min
+; f[0]:  type1 品詞Type1      pos1          *         *
+; f[1]:  type2 品詞Type2      pos2          *         *
+; f[2]:  type3 品詞Type3      pos3          *         *
+; f[3]:  type4 品詞Type4      pos4          *         *
+; f[4]:  cType 活用型         cType         *
+; f[5]:  cForm 活用形         cForm         *
+; f[6]:  base  原形           orthBase      *         *
+; f[7]:  yomi  読み           kana          *         *
+; f[8]:  pron  発音           pron          *
+; f[9]:  dic   辞書名 or UNK  dic           *         *
+
+; each field name is adapted to UniDic3 format
+; json-full : pass the full information
+; json-disp : for display
+; json-min  : minimum infomation for use
 
 cost-factor = 800
 bos-feature = BOS/EOS,*,*,*,*,*,*,*,*
@@ -16,9 +21,19 @@ eval-size = 8
 unk-eval-size = 4
 config-charset = utf8
 
-output-format-type = json
+output-format-type = json-min
 
-node-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"%f[6]","pronBase":"%f[8]","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"%f[7]","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dictionary":"%f[9]"}\n
-unk-format-json = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"","pronBase":"","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dictionary":"UNK"}\n
-bos-format-json =
-eos-format-json = EOS\n
+node-format-json-min = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","orthBase":"%f[6]","kana":"%f[7]","dic":"%f[9]"}\n
+unk-format-json-min = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","orthBase":"","kana":"","dic":"UNK"}\n
+bos-format-json-min =
+eos-format-json-min = EOS\n
+
+node-format-json-disp = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","pron":"%f[8]","orthBase":"%f[6]","kana":"%f[7]","dic":"%f[9]"}\n
+unk-format-json-disp = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","pron":"","orthBase":"","kana":"","dic":"UNK"}\n
+bos-format-json-disp =
+eos-format-json-disp = EOS\n
+
+node-format-json-full = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"%f[8]","orthBase":"%f[6]","pronBase":"","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"%f[7]","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dic":"%f[9]"}\n
+unk-format-json-full = {"surface":"%m","pos1":"%f[0]","pos2":"%f[1]","pos3":"%f[2]","pos4":"%f[3]","cType":"%f[4]","cForm":"%f[5]","lForm":"","lemma":"","orth":"","pron":"","orthBase":"","pronBase":"","goshu":"","iType":"","iForm":"","fType":"","fForm":"","iConType":"","fConType":"","n_type":"","kana":"","kanaBase":"","form":"","formBase":"","aType":"","aConType":"","aModType":"","lid":"","lemma_id":"","dic":"UNK"}\n
+bos-format-json-full =
+eos-format-json-full = EOS\n
