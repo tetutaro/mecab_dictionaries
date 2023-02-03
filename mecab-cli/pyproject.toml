@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mecab-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "A MeCab CLI especially for the dictionaries created in this repository"
 authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
 packages = [{include = "mecab_cli"}]

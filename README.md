@@ -72,8 +72,12 @@ Invoke `make dictionaries` on your terminal. That's all.
     * to grasp easily the word is UNK (unknown word) or not
 * contains simple MeCab CLI ([mecab-cli](mecab-cli))
     * as the sample usage of dictionaries my scripts builds
-    * using fugashi
-        * Thanks for [Paul O'Leary McCann](https://github.com/polm)
+    * using fugashi and [neologdn](https://github.com/ikegami-yukino/neologdn)
+    * Thanks for awesome developers
+        * fugashi
+            * [Paul O'Leary McCann](https://github.com/polm)
+        * neologdn
+            * [Yikino Igarashi](https://github.com/ikegami-yukino)
     * you can run this CLI without installing MeCab
 
 Enjoy!

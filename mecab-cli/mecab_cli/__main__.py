@@ -3,12 +3,21 @@
 from __future__ import annotations
 from typing import List, Dict, NamedTuple, Optional
 import os
-import sys
 import json
 from argparse import ArgumentParser
 
 from fugashi import GenericTagger
 from neologdn import normalize as neonorm
+
+DictionaryPackages: List[str] = [
+    "unidic_cwj",
+    "unidic_csj",
+    "unidic_cwj_neologd",
+    "unidic_csj_neologd",
+    "ipadic",
+    "ipadic_neologd",
+    "jumandic",
+]
 
 
 class Node(NamedTuple):
@@ -166,54 +175,27 @@ class Tokenizer(object):
         return
 
     def _get_dicdir(self: Tokenizer, dic: str) -> None:
-        if dic == "unidic_cwj":
-            import unidic_cwj
-
-            self.dic = unidic_cwj.dicdir
-            self.dic_name = dic
-            self.dic_version = unidic_cwj.__version__
-        elif dic == "unidic_csj":
-            import unidic_csj
-
-            self.dic = unidic_csj.dicdir
-            self.dic_name = dic
-            self.dic_version = unidic_csj.__version__
-        elif dic == "unidic_cwj_neologd":
-            import unidic_cwj_neologd
-
-            self.dic = unidic_cwj_neologd.dicdir
-            self.dic_name = dic
-            self.dic_version = unidic_cwj_neologd.__version__
-        elif dic == "unidic_csj_neologd":
-            import unidic_csj_neologd
-
-            self.dic = unidic_csj_neologd.dicdir
-            self.dic_name = dic
-            self.dic_version = unidic_csj_neologd.__version__
-        elif dic == "ipadic":
-            import ipadic
-
-            self.dic = ipadic.dicdir
-            self.dic_name = dic
-            self.dic_version = ipadic.__version__
-        elif dic == "ipadic_neologd":
-            import ipadic_neologd
-
-            self.dic = ipadic_neologd.dicdir
-            self.dic_name = dic
-            self.dic_version = ipadic_neologd.__version__
-        elif dic == "jumandic":
-            import jumandic
-
-            self.dic = jumandic.dicdir
-            self.dic_name = dic
-            self.dic_version = jumandic.__version__
+        if dic in DictionaryPackages:
+            ldic: Dict[str, str] = dict()
+            exec(
+                f"""import {dic}
+dic_dir: str = {dic}.dicdir
+dic_version: str = {dic}.__version__""",
+                globals(),
+                ldic,
+            )
+            self.dic = ldic["dic_dir"]
+            self.dic_version = ldic["dic_version"]
         else:
             raise ImportError(f"{dic} is not a valid dictionary")
         if self.rc == "":
             self.rc = os.path.join(self.dic, "dicrc")
             if not os.path.exists(self.rc):
                 raise ImportError(f"{dic} don't have dicrc")
+        self.dic_name = dic
+        userdic: str = os.path.join(self.dic, "user.csv")
+        if os.path.exists(userdic):
+            self.dic_name += " + user dictionary"
         return
 
     def _set_tagger(
@@ -331,15 +313,7 @@ def main() -> None:
         "--dictionary",
         type=str,
         default="unidic_cwj",
-        choices=[
-            "unidic_cwj",
-            "unidic_csj",
-            "unidic_cwj_neologd",
-            "unidic_csj_neologd",
-            "ipadic",
-            "ipadic_neologd",
-            "jumandic",
-        ],
+        choices=DictionaryPackages,
         help="Python package of MeCab dictionary",
     )
     parser.add_argument(
@@ -390,8 +364,8 @@ def main() -> None:
         # show dictionary information and exit
         tokenizer.print_dictionaries()
         return
-    # read sentence from stdin
-    text: str = sys.stdin.read().strip()
+    # read one sentence from stdin
+    text: str = input().strip()
     # run Tokenizer
     tokenizer.tokenize(text=text)
     return
