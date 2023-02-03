@@ -4,6 +4,6 @@ dictionary:
 
 .PHONY: clean
 clean:
-	@rm -rf jumandic/dist
+	@rm -rf jumandic/dist/
 	@rm -f  jumandic/jumandic/__version__.py
-	@rm -rf jumandic/jumandic/dic
+	@rm -rf jumandic/jumandic/dic/

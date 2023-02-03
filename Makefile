@@ -121,18 +121,28 @@ clean-dictionary:
 	@cd unidic && make clean
 	@cd ipadic && make clean
 	@cd jumandic && make clean
-	@rm -rf mecab-0.996
-	@rm -f unidic/user.csv
-	@rm -rf unidic/version-unidic-cwj
-	@rm -rf unidic/version-unidic-csj
-	@rm -rf unidic/version-unidic-neologd
-	@rm -rf unidic/src-unidic-cwj
-	@rm -rf unidic/src-unidic-cwj-neologd
-	@rm -rf unidic/src-unidic-crj
-	@rm -rf unidic/src-unidic-crj-neologd
-	@rm -rf unidic-cwj-*-full
-	@rm -rf unidic-csj-*-full
-	@rm -rf mecab-cli/dist
+	@rm -f  unidic/user.csv
+	@rm -f  unidic/version-unidic-cwj
+	@rm -f  unidic/version-unidic-csj
+	@rm -f  unidic/version-unidic-neologd
+	@rm -rf unidic/src-unidic-cwj/
+	@rm -rf unidic/src-unidic-cwj-neologd/
+	@rm -rf unidic/src-unidic-crj/
+	@rm -rf unidic/src-unidic-crj-neologd/
+	@rm -rf unidic-cwj-*-full/
+	@rm -rf unidic-csj-*-full/
+	@rm -f  ipadic/user.csv
+	@rm -f  ipadic/version-ipadic
+	@rm -f  ipadic/version-ipadic-neologd
+	@rm -rf ipadic/src-ipadic/
+	@rm -rf ipadic/src-ipadic-neologd/
+	@rm -rf ipadic-2.7.0-20070801/
+	@rm -f  jumandic/user.csv
+	@rm -f  jumandic/version-jumandic
+	@rm -rf jumandic/src-jumandic/
+	@rm -rf jumandic-7.0-20130310/
+	@rm -rf mecab-0.996/
+	@rm -rf mecab-cli/dist/
 
 .PHONY: clean-system
 clean-system:
