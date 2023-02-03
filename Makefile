@@ -132,6 +132,7 @@ clean-dictionary:
 	@rm -rf unidic/src-unidic-crj-neologd
 	@rm -rf unidic-cwj-*-full
 	@rm -rf unidic-csj-*-full
+	@rm -rf mecab-cli/dist
 
 .PHONY: clean-system
 clean-system:
