@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mecab-cli"
+version = "0.1.0"
+description = "A MeCab CLI especially for the dictionaries created in this repository"
+authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
+packages = [{include = "mecab_cli"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fugashi = "^1.2.1"
+neologdn = "^0.5.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+
+[tool.poetry.scripts]
+mecab = "mecab_cli.__main__:main"

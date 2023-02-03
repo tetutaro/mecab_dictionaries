@@ -1,12 +1,12 @@
 .PHONY: all
-all: dictionaries
+all: dictionaries cli
+
+.PHONY: dictionaries
+dictionaries: unidic ipadic jumandic
 
 .PHONY: mecab
 mecab:
 	@download_mecab.sh
-
-.PHONY: dictionaries
-dictionaries: unidic ipadic jumandic
 
 .PHONY: unidic
 unidic: mecab
@@ -53,6 +53,10 @@ jumandic: mecab
 	@download_jumandic.sh
 	@cd jumandic && make dictionary
 
+.PHONY: cli
+cli:
+	@cd mecab-cli && poetry build
+
 .PHONY: build-package
 build-package:
 	@cd unidic/unidic-cwj/ && poetry build
@@ -86,6 +90,21 @@ install-dictionaries-local:
 .PHONY: uninstall-dictionaries-local
 uninstall-dictionaries-local:
 	pip uninstall -y unidic-cwj unidic-cwj-neologd unidic-csj unidic-csj-neologd ipadic ipadic-neologd jumandic
+
+.PHONY: install-pipx
+install-pipx:
+	pipx install mecab-cli/dist/mecab_cli-*.whl
+	pipx inject mecab-cli unidic/unidic-cwj/dist/unidic_cwj-*.whl
+	pipx inject mecab-cli unidic/unidic-cwj-neologd/dist/unidic_cwj_neologd-*.whl
+	pipx inject mecab-cli unidic/unidic-csj/dist/unidic_csj-*.whl
+	pipx inject mecab-cli unidic/unidic-csj-neologd/dist/unidic_csj_neologd-*.whl
+	pipx inject mecab-cli ipadic/ipadic/dist/ipadic-*.whl
+	pipx inject mecab-cli ipadic/ipadic-neologd/dist/ipadic_neologd-*.whl
+	pipx inject mecab-cli jumandic/jumandic/dist/jumandic-*.whl
+
+.PHONY: uninstall-pipx
+uninstall-pipx:
+	pipx uninstall mecab-cli
 
 .PHONY: clean
 clean: clean-python clean-dictionary clean-system
