@@ -127,8 +127,8 @@ clean-dictionary:
 	@rm -f  unidic/version-unidic-neologd
 	@rm -rf unidic/src-unidic-cwj/
 	@rm -rf unidic/src-unidic-cwj-neologd/
-	@rm -rf unidic/src-unidic-crj/
-	@rm -rf unidic/src-unidic-crj-neologd/
+	@rm -rf unidic/src-unidic-csj/
+	@rm -rf unidic/src-unidic-csj-neologd/
 	@rm -rf unidic-cwj-*-full/
 	@rm -rf unidic-csj-*-full/
 	@rm -f  ipadic/user.csv
