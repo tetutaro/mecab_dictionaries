@@ -3,6 +3,8 @@
 from __future__ import annotations
 from typing import List, Dict, NamedTuple, Optional
 import os
+import re
+from re import Match
 import json
 from argparse import ArgumentParser
 
@@ -274,6 +276,43 @@ dic_version: str = {dic}.__version__""",
         raw: str = self.tagger.parse(text)
         return raw.split("EOS")[0].strip()
 
+    def _cast_node(self: Tokenizer, raw_node: str) -> Node:
+        if self.format == "min":
+            node_cls = Node
+        elif self.format == "disp":
+            node_cls = NodeDisp
+        elif self.format == "full":
+            node_cls = NodeFull
+        else:
+            raise ValueError(
+                f"output_format_type ({self.format}) is invalid.",
+            )
+        while True:
+            match: Optional[Match] = re.search(
+                r':"[^:,]*?(?<!\\)(")[^:,]*?",', raw_node
+            )
+            if match is None:
+                break
+            start: int = match.start(1)
+            raw_node = raw_node[:start] + "\\" + raw_node[start:]
+        try:
+            node: Node = node_cls(**json.loads(raw_node))
+        except Exception as e:
+            match = re.match(r'^{"surface":"(.*?)","pos1":"', raw_node)
+            if match is None:
+                raise e
+            node = node_cls(
+                surface=match.group(1),
+                pos1="記号",
+                pos2="一般",
+                pos3="",
+                pos4="",
+                orthBase="",
+                kana="",
+                dic="UNK",
+            )
+        return node
+
     def _output_nodes(self: Tokenizer, raw_nodes: str) -> None:
         nodes: Nodes = Nodes()
         for raw_node in raw_nodes.splitlines():
@@ -285,19 +324,7 @@ dic_version: str = {dic}.__version__""",
             if self.raw_output:
                 print(raw_node)
                 continue
-            if '"""' in raw_node:
-                raw_node = raw_node.replace('"""', '"\\""')
-            if self.format == "min":
-                node: Node = Node(**json.loads(raw_node))
-            elif self.format == "disp":
-                node: NodeDisp = NodeDisp(**json.loads(raw_node))
-            elif self.format == "full":
-                node: NodeFull = NodeFull(**json.loads(raw_node))
-            else:
-                raise ValueError(
-                    f"output_format_type ({self.format}) is invalid.",
-                )
-            nodes.append(node=node)
+            nodes.append(node=self._cast_node(raw_node=raw_node))
         if len(nodes) > 0:
             print(nodes)
         return

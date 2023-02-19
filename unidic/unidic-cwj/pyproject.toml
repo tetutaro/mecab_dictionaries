@@ -7,7 +7,7 @@ packages = [{include = "unidic_cwj"}]
 include = ["unidic_cwj/__version__.py", "unidic_cwj/dic/*"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 
 
 [build-system]

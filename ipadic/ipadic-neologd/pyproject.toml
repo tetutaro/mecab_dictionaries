@@ -7,7 +7,7 @@ packages = [{include = "ipadic_neologd"}]
 include = ["ipadic_neologd/__version__.py", "ipadic_neologd/dic/*"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 
 
 [build-system]

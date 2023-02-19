@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mecab-dictionaries"
-version = "0.1.1"
+version = "0.2.0"
 description = "create various dictionaries for MeCab and MeCab CLI using fugashi"
 authors = ["Tetsutaro Maruyama <tetsutaro.maruyama@gmail.com>"]
 

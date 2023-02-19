@@ -7,7 +7,7 @@ packages = [{include = "ipadic"}]
 include = ["ipadic/__version__.py", "ipadic/dic/*"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 
 
 [build-system]
